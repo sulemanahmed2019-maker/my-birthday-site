@@ -115,6 +115,8 @@
     opacity: 0; transform: translateY(12px); transition: opacity .7s ease, transform .7s ease;
     display: grid; grid-template-columns: 420px 1fr; gap: 28px; align-items: center; width: min(1100px, 94%); z-index: 2;
     align-items: center;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .hero__main.is-visible { opacity: 1; transform: none; }
 
@@ -122,7 +124,11 @@
     width: 380px; height: 380px; border-radius: 50%; display:flex; align-items:center; justify-content:center;
     background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
     box-shadow: 0 40px 90px -30px rgba(0,0,0,.7), inset 0 -10px 30px rgba(0,0,0,.25);
-    position: relative; overflow: visible;
+    position: relative; overflow: hidden;
+    /* make it maintain a square ratio on small screens */
+    aspect-ratio: 1 / 1;
+    max-width: min(56vw, 420px);
+    height: auto;
   }
   .hero__frame::after { content: ''; position: absolute; inset: -8px; border-radius: 50%; box-shadow: 0 0 0 6px rgba(109,226,183,0.06); pointer-events: none; }
   .hero__frame-inner {
@@ -422,11 +428,21 @@
   }
 
   @media (max-width: 560px) {
-    .hero__main { display: flex; flex-direction: column; }
-    .hero__scroll { margin-top: 28px; }
-    .hero__frame { width: 52%; margin: 0 auto 18px; transform: none; }
+    .hero__main { display: flex; flex-direction: column; gap: 14px; padding: 28px 12px; }
+    .hero__scroll { margin-top: 18px; }
+    /* make the hero frame a responsive circle that fits within viewport width */
+    .hero__frame { width: min(72vw, 340px); margin: 0 auto 12px; transform: none; aspect-ratio: 1 / 1; }
+    .hero__frame-inner img { object-position: center center; }
     .hero__title { font-size: clamp(1.8rem, 8vw, 2.6rem); }
     .slider { max-width: 300px; }
+    /* ensure no horizontal overflow from balloons or ambient elements */
+    body, html, .hero { overflow-x: hidden; }
+  }
+
+  @media (max-width: 420px) {
+    .hero__frame { width: min(78vw, 300px); }
+    .hero__title span { font-size: clamp(1.8rem, 10vw, 3.8rem); }
+    .hero__tagline { font-size: .98rem; }
   }
 
   /* Hero CTAs */
